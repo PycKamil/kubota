@@ -54,10 +54,14 @@ app.get('/webhook/', function (req, res) {
           } else if (event.message && event.message.text) {
               var text = event.message.text.trim().substring(0, 200);
               bot.processMessage(text)
-              bot.use(function (session, next) {
-                  sendTextMessage(sender, 'Text received ' + session.message);
-                   next();
-
+            //   bot.use(function (session, next) {
+            //       sendTextMessage(sender, 'Text received ' + session.message);
+            //        next();
+            //
+            // });
+            bot.on('reply', function (message) {
+                sendTextMessage(sender, 'Text received ' + message);
+              done();
             });
           }
       });
