@@ -13,26 +13,31 @@ var port = process.env.PORT || 1337;
 
 var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=e252a847-190c-4341-b4d2-105acc75f898&subscri...')
 var bot = new builder.TextBot();
-bot.add('/', dialog);
-dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
-dialog.on('StartActivity', [
-    function (session, args, next) {
-        var task = builder.EntityRecognizer.findEntity(args.entities, 'ActivityType');
-        if (!task) {
-            builder.Prompts.text(session, "What would you like to call the task?");
-        } else {
-            next({ response: task.entity });
-        }
-    },
-    function (session, results) {
-        if (results.response) {
-            // ... save task
-            session.send("Ok... Added the '%s' task.", results.response);
-        } else {
-            session.send("Ok");
-        }
-    }
-]);
+bot.add('/', function (session) {
+
+    //respond with user's message
+    session.send("You said " + session.message.text);
+});
+
+// dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
+// dialog.on('showMe', [
+//     function (session, args, next) {
+//         var task = builder.EntityRecognizer.findEntity(args.entities, 'photo');
+//         if (!task) {
+//             builder.Prompts.text(session, "What would you like to call the task?");
+//         } else {
+//             next({ response: task.entity });
+//         }
+//     },
+//     function (session, results) {
+//         if (results.response) {
+//             // ... save task
+//             session.send("Ok... Added the '%s' task.", results.response);
+//         } else {
+//             session.send("Ok");
+//         }
+//     }
+// ]);
 
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'PDK123') {
