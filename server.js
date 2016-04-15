@@ -45,6 +45,7 @@ app.get('/webhook/', function (req, res) {
       var messagingEvents = req.body.entry[0].messaging;
 
       messagingEvents.forEach((event) => {
+        var sender = event.sender.id;
 
         var bot;
         if (botDict[sender]) {
@@ -58,8 +59,6 @@ app.get('/webhook/', function (req, res) {
           botDict[sender] = bot
         }
 
-          var sender = event.sender.id;
-          this.sender = sender;
           if (event.postback) {
               var text = JSON.stringify(event.postback).substring(0, 200);
               bot.processMessage(text)
