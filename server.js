@@ -65,7 +65,7 @@ app.get('/webhook/', function (req, res) {
           } else if (event.message && event.message.text) {
               var text = event.message.text.trim().substring(0, 200);
               bot.processMessage({ text: text})
-              sendGenericMessage(sender)
+              // sendGenericMessage(sender)
           }
       });
 
@@ -130,4 +130,49 @@ function sendGenericMessage (sender) {
             }
         }
     });
+}
+
+dialog.on('goTo', [
+    function (session, args, next) {
+
+        var task = builder.EntityRecognizer.findEntity(args.entities, 'kids');
+        if (task) {
+          downloadOffersForCategory(session, 1);
+        }
+
+        var task = builder.EntityRecognizer.findEntity(args.entities, 'esk');
+        if (task) {
+          downloadOffersForCategory(session, 69);
+        }
+
+        var task = builder.EntityRecognizer.findEntity(args.entities, 'outdoors');
+        if (task) {
+          downloadOffersForCategory(session, 109);
+        }
+
+        var task = builder.EntityRecognizer.findEntity(args.entities, 'seniors');
+        if (task) {
+          downloadOffersForCategory(session, 111);
+        }
+
+        var task = builder.EntityRecognizer.findEntity(args.entities, 'everyone');
+        if (task) {
+          downloadOffersForCategory(session, 287);
+        }
+
+        var task = builder.EntityRecognizer.findEntity(args.entities, 'adults');
+        if (task) {
+          downloadOffersForCategory(session, 253);
+        }
+    }
+]);
+
+function downloadOffersForCategory(session, category) {
+  var request = require('request');
+  request('http://go.wroclaw.pl/api/v1.0/offers?key=1008954996011385882032213270462822894601&&category-id=' + category, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        items = obj.items
+        session.send("items[0].title")
+    }
+  })
 }
