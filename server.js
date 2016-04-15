@@ -12,7 +12,6 @@ var pageToken = "EAAOA7gj8NdYBAKehCNkZCoJJqDLD7Jzi3c9IIDANxEFjZAlqUZAtGTbwPS0t2k
 var port = process.env.PORT || 1337;
 
 var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=e252a847-190c-4341-b4d2-105acc75f898&subscription-key=5349414a86334241b0bfe3254648fa52');
-var sender;
 
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 dialog.on('showMe', [
@@ -33,11 +32,7 @@ dialog.on('showMe', [
         }
     }
 ]);
-var bot = new builder.TextBot();
-bot.on('reply', function (message) {
-    sendTextMessage(this.sender, message.text);
-});
-bot.add('/', dialog);
+var botDict = {};
 
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'PDK123') {
@@ -50,12 +45,24 @@ app.get('/webhook/', function (req, res) {
       var messagingEvents = req.body.entry[0].messaging;
 
       messagingEvents.forEach((event) => {
+
+        var bot;
+        if (botDict[sender]) {
+          bot = botDict[sender];
+        } else {
+          bot = new builder.TextBot();
+          bot.add('/', dialog);
+          bot.on('reply', function (message) {
+              sendTextMessage(sender, message.text);
+          });
+          botDict[sender] = bot
+        }
+
           var sender = event.sender.id;
           this.sender = sender;
           if (event.postback) {
               var text = JSON.stringify(event.postback).substring(0, 200);
               bot.processMessage(text)
-              sendTextMessage(sender, 'Postback received: ' + text);
           } else if (event.message && event.message.text) {
               var text = event.message.text.trim().substring(0, 200);
               bot.processMessage({ text: text})
