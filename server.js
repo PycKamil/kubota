@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var app = express();
 
@@ -9,7 +11,6 @@ app.get('/webhook/', function (req, res) {
     }
     res.send('Error, wrong validation token');
   })
-app.listen(port);
 
 app.post('/webhook/', function (req, res) {
   messaging_events = req.body.entry[0].messaging;
@@ -23,6 +24,8 @@ app.post('/webhook/', function (req, res) {
   }
   res.sendStatus(200);
 });
+
+app.listen(port);
 
 function sendTextMessage(sender, text) {
   messageData = {
