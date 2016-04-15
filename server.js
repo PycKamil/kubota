@@ -65,7 +65,7 @@ app.get('/webhook/', function (req, res) {
           } else if (event.message && event.message.text) {
               var text = event.message.text.trim().substring(0, 200);
               bot.processMessage({ text: text})
-              sendGenericMessage()
+              sendGenericMessage(sender)
           }
       });
 
