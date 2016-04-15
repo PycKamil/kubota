@@ -1,6 +1,12 @@
+var express = require('express');
+var app = express();
+
 var http = require('http')
 var port = process.env.PORT || 1337;
-http.createServer(function(req, res) {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Hello World\n');
-}).listen(port);
+app.get('/webhook/', function (req, res) {
+    if (req.query['hub.verify_token'] === 'PDK123') {
+      res.send(req.query['hub.challenge']);
+    }
+    res.send('Error, wrong validation token');
+  })
+app.listen(port);
