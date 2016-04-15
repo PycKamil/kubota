@@ -31,7 +31,7 @@ app.get('/webhook/', function (req, res) {
           }
       });
 
-      res.sendStatus(200);
+      res.status(200).send('OK')
   });
 
 function sendTextMessage (sender, text) {
