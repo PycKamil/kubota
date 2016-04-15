@@ -65,6 +65,7 @@ app.get('/webhook/', function (req, res) {
           } else if (event.message && event.message.text) {
               var text = event.message.text.trim().substring(0, 200);
               bot.processMessage({ text: text})
+              sendGenericMessage()
           }
       });
 
@@ -95,4 +96,38 @@ function sendMessage (sender, message) {
                 console.log('Error: ', res.body.error);
             }
         });
+}
+
+function sendGenericMessage (sender) {
+    sendMessage(sender, {
+        attachment: {
+            type: 'template',
+            payload: {
+                template_type: 'generic',
+                elements: [{
+                    title: 'First card',
+                    subtitle: 'Element #1 of an hscroll',
+                    image_url: 'http://messengerdemo.parseapp.com/img/rift.png',
+                    buttons: [{
+                        type: 'web_url',
+                        url: 'https://www.messenger.com/',
+                        title: 'Web url'
+                    }, {
+                        type: 'postback',
+                        title: 'Postback',
+                        payload: 'Payload for first element in a generic bubble'
+                    }]
+                }, {
+                    title: 'Second card',
+                    subtitle: 'Element #2 of an hscroll',
+                    image_url: 'http://messengerdemo.parseapp.com/img/gearvr.png',
+                    buttons: [{
+                        type: 'postback',
+                        title: 'Postback',
+                        payload: 'Payload for second element in a generic bubble'
+                    }]
+                }]
+            }
+        }
+    });
 }
