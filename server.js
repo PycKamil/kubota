@@ -1,9 +1,12 @@
 'use strict';
 
-var express = require('express');
-var app = express();
+const express = require('express');
+const request = require('superagent');
+const bodyParser = require('body-parser');
 
-var http = require('http')
+const app = express();
+app.use(bodyParser.json());
+
 var port = process.env.PORT || 1337;
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'PDK123') {
