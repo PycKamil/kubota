@@ -58,7 +58,7 @@ app.get('/webhook/', function (req, res) {
           });
           botDict[sender] = bot
         }
-
+        console.log('TEST' + event)
           if (event.postback) {
               var text = JSON.stringify(event.postback).substring(0, 200);
               console.log('Payback: ', event.postback);
