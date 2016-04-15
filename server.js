@@ -13,31 +13,32 @@ var port = process.env.PORT || 1337;
 
 var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=e252a847-190c-4341-b4d2-105acc75f898&subscri...')
 var bot = new builder.TextBot();
-bot.add('/', function (session) {
+// bot.add('/', function (session) {
+//
+//     //respond with user's message
+//     session.send("You said " + session.message.text);
+// });
+bot.add('/', dialog);
 
-    //respond with user's message
-    session.send("You said " + session.message.text);
-});
-
-// dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
-// dialog.on('showMe', [
-//     function (session, args, next) {
-//         var task = builder.EntityRecognizer.findEntity(args.entities, 'photo');
-//         if (!task) {
-//             builder.Prompts.text(session, "What would you like to call the task?");
-//         } else {
-//             next({ response: task.entity });
-//         }
-//     },
-//     function (session, results) {
-//         if (results.response) {
-//             // ... save task
-//             session.send("Ok... Added the '%s' task.", results.response);
-//         } else {
-//             session.send("Ok");
-//         }
-//     }
-// ]);
+dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
+dialog.on('showMe', [
+    function (session, args, next) {
+        var task = builder.EntityRecognizer.findEntity(args.entities, 'photo');
+        if (!task) {
+            builder.Prompts.text(session, "What would you like to call the task?");
+        } else {
+            next({ response: task.entity });
+        }
+    },
+    function (session, results) {
+        if (results.response) {
+            // ... save task
+            session.send("Ok... Added the '%s' task.", results.response);
+        } else {
+            session.send("Ok");
+        }
+    }
+]);
 
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'PDK123') {
@@ -59,14 +60,9 @@ app.get('/webhook/', function (req, res) {
           } else if (event.message && event.message.text) {
               var text = event.message.text.trim().substring(0, 200);
               bot.processMessage({ text: text})
-            //   bot.use(function (session, next) {
-            //       sendTextMessage(sender, 'Text received ' + session.message);
-            //        next();
-            //
-            // });
-            bot.on('reply', function (message) {
-                sendTextMessage(sender, 'Text received ' + message.text);
-            });
+              bot.on('reply', function (message) {
+                  sendTextMessage(sender, message.text);
+              });
           }
       });
 
