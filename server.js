@@ -35,8 +35,9 @@ dialog.on('showMe', [
 ]);
 var bot = new builder.TextBot();
 bot.on('reply', function (message) {
-    sendTextMessage(sender, message.text);
+    sendTextMessage(this.sender, message.text);
 });
+bot.add('/', dialog);
 
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'PDK123') {
