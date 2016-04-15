@@ -11,7 +11,9 @@
     "type": "git",
     "url": "git+https://github.com/PycKamil/kubota.git"
   },
-  "engines":{"node":"4.4.0"},
+  "engines": {
+    "node": "4.4.0"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -20,7 +22,9 @@
   "homepage": "https://github.com/PycKamil/kubota#readme",
   "dependencies": {
     "body-parser": "^1.15.0",
+    "botbuilder": "^0.8.0",
     "express": "^4.13.4",
+    "restify": "^4.0.4",
     "superagent": "^1.8.3",
     "util": "^0.10.3"
   }

@@ -2,6 +2,7 @@
 const express = require('express');
 const request = require('superagent');
 const bodyParser = require('body-parser');
+const builder = require('botbuilder');
 
 const app = express();
 app.use(bodyParser.json());
@@ -9,6 +10,30 @@ app.use(bodyParser.json());
 var pageToken = "EAAOA7gj8NdYBAKehCNkZCoJJqDLD7Jzi3c9IIDANxEFjZAlqUZAtGTbwPS0t2krIBi6HBUyLaJ2L3AEjCizcafgZCX82USmmZB9jioSDQHZCpEtgKb6jf7dyrBGxIZB1YXYZBvyPGvPlsnKGNZB1eNBVu9BNdt6ZCKsaofiAvi3H4xeAZDZD";
 
 var port = process.env.PORT || 1337;
+
+var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=e252a847-190c-4341-b4d2-105acc75f898&subscri...')
+var bot = new builder.TextBot();
+bot.add('/', dialog);
+dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
+dialog.on('StartActivity', [
+    function (session, args, next) {
+        var task = builder.EntityRecognizer.findEntity(args.entities, 'ActivityType');
+        if (!task) {
+            builder.Prompts.text(session, "What would you like to call the task?");
+        } else {
+            next({ response: task.entity });
+        }
+    },
+    function (session, results) {
+        if (results.response) {
+            // ... save task
+            session.send("Ok... Added the '%s' task.", results.response);
+        } else {
+            session.send("Ok");
+        }
+    }
+]);
+
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'PDK123') {
       res.send(req.query['hub.challenge']);
@@ -24,10 +49,16 @@ app.get('/webhook/', function (req, res) {
 
           if (event.postback) {
               var text = JSON.stringify(event.postback).substring(0, 200);
+              bot.processMessage(text)
               sendTextMessage(sender, 'Postback received: ' + text);
           } else if (event.message && event.message.text) {
               var text = event.message.text.trim().substring(0, 200);
-              sendTextMessage(sender, 'Text received, echo: ' + text);
+              bot.processMessage(text)
+              bot.use(function (session, next) {
+                  sendTextMessage(sender, 'Text received ' + session.message);
+                   next();
+
+            });
           }
       });
 
