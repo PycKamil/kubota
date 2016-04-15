@@ -61,6 +61,8 @@ app.get('/webhook/', function (req, res) {
 
           if (event.postback) {
               var text = JSON.stringify(event.postback).substring(0, 200);
+              console.log('Payback: ', event.postback);
+
               bot.processMessage({ text: text})
           } else if (event.message && event.message.text) {
               var text = event.message.text.trim().substring(0, 200);
