@@ -65,7 +65,7 @@ app.get('/webhook/', function (req, res) {
             //
             // });
             bot.on('reply', function (message) {
-                sendTextMessage(sender, 'Text received ' + message);
+                sendTextMessage(sender, 'Text received ' + message.text);
             });
           }
       });
