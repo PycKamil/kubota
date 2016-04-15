@@ -16,18 +16,23 @@ app.get('/webhook/', function (req, res) {
     res.send('Error, wrong validation token');
   })
 
-app.post('/webhook/', function (req, res) {
-  messaging_events = req.body.entry[0].messaging;
-  for (i = 0; i < messaging_events.length; i++) {
-    event = req.body.entry[0].messaging[i];
-    sender = event.sender.id;
-    if (event.message && event.message.text) {
-      text = event.message.text;
-      sendTextMessage(sender, "Text received, echo: "+ text.substring(0, 200));
-    }
-  }
-  res.sendStatus(200);
-});
+  app.post('/webhook', (req, res) => {
+      var messagingEvents = req.body.entry[0].messaging;
+
+      messagingEvents.forEach((event) => {
+          var sender = event.sender.id;
+
+          if (event.postback) {
+              var text = JSON.stringify(event.postback).substring(0, 200);
+              sendTextMessage(sender, 'Postback received: ' + text);
+          } else if (event.message && event.message.text) {
+              var text = event.message.text.trim().substring(0, 200);
+              sendTextMessage(sender, 'Text received, echo: ' + text);
+          }
+      });
+
+      res.sendStatus(200);
+  });
 
 function sendTextMessage (sender, text) {
     sendMessage(sender, {
