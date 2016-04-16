@@ -211,11 +211,12 @@ function downloadOffersForCategory(session, category) {
     if (!error && response.statusCode == 200) {
       console.log("Downloaded category!");
 
+/*
       obj = JSON.parse(body);
       items = obj.items;
       message = new builder.Message();
       //message.setText(session, "Zobacz moje propozycje")
-      /*message.elements = []
+      message.elements = []
 
       for (var i = 0; i < items.length && i < 10; i++) {
         var item = items[i];
