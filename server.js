@@ -11,6 +11,8 @@ var pageToken = "EAAOA7gj8NdYBAKehCNkZCoJJqDLD7Jzi3c9IIDANxEFjZAlqUZAtGTbwPS0t2k
 
 var port = process.env.PORT || 1337;
 
+var siateczka = false
+
 var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=e252a847-190c-4341-b4d2-105acc75f898&subscription-key=5349414a86334241b0bfe3254648fa52');
 var popularItems = [];
 
@@ -18,9 +20,10 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 dialog.on('showMe', [
     function (session, args, next) {
       message = new builder.Message()
-      message.SIATECZKAIMAGE = "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg"
-      session.send(message)
-      session.send("Obraz „Helenka z wazonem” został namalowany przez Stanisława Wyspiańskiego w 1902 roku. Obecnie można go podziwiać w Muzeum Narodowym w Krakowie.")
+      siateczka == true
+      message.SIATECZKAIMAGE = "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg";
+      session.send(message);
+      session.send("Obraz „Helenka z wazonem” został namalowany przez Stanisława Wyspiańskiego w 1902 roku. Obecnie można go podziwiać w Muzeum Narodowym w Krakowie.");
     },
 ]);
 var botDict = {};
@@ -45,11 +48,12 @@ app.get('/webhook/', function (req, res) {
           bot = new builder.TextBot();
           bot.add('/', dialog);
           bot.on('reply', function (message) {
-            if (message.SIATECZKAIMAGE) {
-              sendTextMessage(sender, "a to chociaz dziala?")
-              sendImageMessage(sender, "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg")
+            if (message.SIATECZKAIMAGE || siateczka) {
+              siateczka = false
+              sendTextMessage(sender, "a to chociaz dziala?");
+              sendImageMessage(sender, "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg");
             } else if (message.elements) {
-              sendGenericMessage(sender, message.elements)
+              sendGenericMessage(sender, message.elements);
             } else {
               sendTextMessage(sender, message.text);
             }
