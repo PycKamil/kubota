@@ -184,7 +184,7 @@ function getUserData(session, userID) {
       if (!error && response.statusCode == 200) {
           obj = JSON.parse(body)
           console.log(obj);
-          session.send('Witaj ' + obj.first_name + '!')
+          session.send('Witaj, ' + obj.first_name + '! Nazywam się Kubot i będę Twoim źródłem informacji o kulturze. W czym mogę Ci pomóc?')
           session.userData.name = obj.first_name;
           session.replaceDialog('/');
       }
