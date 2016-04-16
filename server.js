@@ -93,13 +93,12 @@ app.get('/webhook/', function (req, res) {
         console.log('TEST' + event)
           if (event.postback) {
               var text = JSON.stringify(event.postback).substring(0, 200);
-              console.log('Payback: ', event.postback);
+              console.log('Payback: ', text);
               popularItems.push(text)
               sendTextMessage(sender, "Świetnie! Przypomnę Ci o tym wydarzeniu dzień wcześniej.")
           } else if (event.message && event.message.text) {
               var text = event.message.text.trim().substring(0, 200);
               bot.processMessage({ text: text})
-              // sendGenericMessage(sender)
           }
       });
 
@@ -206,6 +205,7 @@ function downloadOffersForCategory(session, category) {
 
       for (var i = 0; i < items.length && i < 10; i++) {
         var item = items[i];
+        console.log(popularItems);
         if (popularItems.indexOf(item.id.toString) > -1) {
           session.send ("W ostatnim czasie popularnością cieszy się " + item.title +".")
         }
