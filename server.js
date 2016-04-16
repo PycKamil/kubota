@@ -51,7 +51,7 @@ app.get('/webhook/', function (req, res) {
               siateczka = false
               sendImageMessage(sender, "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg");
               sendTextMessage(sender, "Obraz „Helenka z wazonem” został namalowany przez Stanisława Wyspiańskiego w 1902 roku. Obecnie można go podziwiać w Muzeum Narodowym w Krakowie.");
-            } else if (message.elements.lenght > 0) {
+            } else if (message.elements && message.elements.lenght > 0) {
               sendGenericMessage(sender, message.elements);
             } else {
               sendTextMessage(sender, message.text);
