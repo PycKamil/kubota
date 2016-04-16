@@ -57,7 +57,7 @@ app.get('/webhook/', function (req, res) {
               sendTextMessage(sender, message.text);
           });
 
-      
+
           // Install First Run middleware and dialog
           bot.use(function (session, next) {
               if (!session.userData.firstRun) {
@@ -69,7 +69,7 @@ app.get('/webhook/', function (req, res) {
           });
           bot.add('/firstRun', [
               function (session) {
-                  builder.Prompts.text(session, "Hello... What's your name?");
+                getUserData(session, sender);
               },
               function (session, results) {
                   // We'll save the prompts result and return control to main through
@@ -195,6 +195,18 @@ dialog.on('goTo', [
         }
     }
 ]);
+
+function getUserData(session, userID) {
+  var request = require('request');
+
+    request('https://graph.facebook.com/v2.6/'+userID+'?fields=first_name,last_name,profile_pic&access_token='+pageToken, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+          obj = JSON.parse(body)
+          console.log(obj);
+          session.send(obj.first_name)
+      }
+    })
+}
 
 function downloadOffersForCategory(session, category) {
   var request = require('request');
