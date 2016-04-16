@@ -12,6 +12,7 @@ var pageToken = "EAAOA7gj8NdYBAKehCNkZCoJJqDLD7Jzi3c9IIDANxEFjZAlqUZAtGTbwPS0t2k
 var port = process.env.PORT || 1337;
 
 var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=e252a847-190c-4341-b4d2-105acc75f898&subscription-key=5349414a86334241b0bfe3254648fa52');
+var popularItems = [];
 
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 dialog.on('showMe', [
@@ -93,6 +94,7 @@ app.get('/webhook/', function (req, res) {
           if (event.postback) {
               var text = JSON.stringify(event.postback).substring(0, 200);
               console.log('Payback: ', event.postback);
+              popularItems.push(text)
               sendTextMessage(sender, "Świetnie! Przypomnę Ci o tym wydarzeniu dzień wcześniej.")
           } else if (event.message && event.message.text) {
               var text = event.message.text.trim().substring(0, 200);
@@ -201,9 +203,13 @@ function downloadOffersForCategory(session, category) {
       message = new builder.Message()
       message.setText(session, "Zobacz moje propozycje")
       message.elements = []
+      var popularString;
 
       for (var i = 0; i < items.length && i < 10; i++) {
-        var item = items[i]
+        var item = items[i];
+        if (popularItems.includes(item.id.toString)) {
+          session.send ("W ostatnim czasie popularnością cieszy się " + item.title +".")
+        }
           message.elements.push({
               title: item.title,
               subtitle: item.longDescription.replace(/<\/?[^>]+(>|$)/g, ""),
