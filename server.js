@@ -155,32 +155,40 @@ dialog.on('goTo', [
         var task = builder.EntityRecognizer.findEntity(args.entities, 'kids');
         if (task) {
           downloadOffersForCategory(session, 1);
+          retun;
         }
 
         var task = builder.EntityRecognizer.findEntity(args.entities, 'esk');
         if (task) {
           downloadOffersForCategory(session, 69);
+          retun;
         }
 
         var task = builder.EntityRecognizer.findEntity(args.entities, 'outdoors');
         if (task) {
           downloadOffersForCategory(session, 109);
+          retun;
         }
 
         var task = builder.EntityRecognizer.findEntity(args.entities, 'seniors');
         if (task) {
           downloadOffersForCategory(session, 111);
+          retun;
         }
 
         var task = builder.EntityRecognizer.findEntity(args.entities, 'everyone');
         if (task) {
           downloadOffersForCategory(session, 287);
+          retun;
         }
 
         var task = builder.EntityRecognizer.findEntity(args.entities, 'adults');
         if (task) {
           downloadOffersForCategory(session, 253);
+          retun;
         }
+
+        next();
     }
 ]);
 
