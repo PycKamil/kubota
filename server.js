@@ -17,16 +17,16 @@ var popularItems = [];
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 dialog.on('showMe', [
     function (session, args, next) {
-      message = new builder.Message()
-      message.elements = []
-      message.elements.push({
-        title: "",
-        subtitle: "",
-        image_url: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg",
-        buttons: []
-      });
-      session.send(message)
-      session.send("Obraz „Helenka z wazonem” został namalowany przez Stanisława Wyspiańskiego w 1902 roku. Obecnie można go podziwiać w Muzeum Narodowym w Krakowie.")
+      // message = new builder.Message()
+      // message.elements = []
+      // message.elements.push({
+      //   title: "",
+      //   subtitle: "",
+      //   image_url: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg",
+      //   buttons: []
+      // });
+      // session.send(message)
+      session.send({ fallbackText: text, contentType: 'image/jpeg', contentUrl: "Obraz „Helenka z wazonem” został namalowany przez Stanisława Wyspiańskiego w 1902 roku. Obecnie można go podziwiać w Muzeum Narodowym w Krakowie." })
     },
 ]);
 var botDict = {};
@@ -51,8 +51,9 @@ app.get('/webhook/', function (req, res) {
           bot = new builder.TextBot();
           bot.add('/', dialog);
           bot.on('reply', function (message) {
-            sendImageMessage(sender, "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg")
-            if (message.elements) {
+            if (message.attachment) {
+              sendImageMessage(sender, "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg")
+            } else if (message.elements) {
               sendGenericMessage(sender, message.elements)
             } else {
               sendTextMessage(sender, message.text);
