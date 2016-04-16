@@ -90,11 +90,10 @@ app.get('/webhook/', function (req, res) {
 
           botDict[sender] = bot
         }
-        console.log('TEST' + event)
           if (event.postback) {
-              var text = JSON.stringify(event.postback).substring(0, 200);
-              console.log('Payback: ', text);
-              popularItems.push(text)
+              //var text = JSON.stringify(event.postback).substring(0, 200);
+              //console.log('Payback: ', text);
+              popularItems.push(event.postback.payload)
               sendTextMessage(sender, "Świetnie! Przypomnę Ci o tym wydarzeniu dzień wcześniej.")
           } else if (event.message && event.message.text) {
               var text = event.message.text.trim().substring(0, 200);
