@@ -204,7 +204,7 @@ function getUserData(session, userID) {
           obj = JSON.parse(body)
           console.log(obj);
           session.send('Witaj ' + obj.first_name + '!')
-          session.userData.name = results.response;
+          session.userData.name = obj.first_name;
           session.replaceDialog('/');
       }
     })
