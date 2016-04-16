@@ -21,6 +21,7 @@ dialog.on('showMe', [
     function (session, args, next) {
       message = new builder.Message()
       siateczka = true
+      message.SIATECZKAIMAGE = "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg";
       session.send(message);
       session.send("Obraz „Helenka z wazonem” został namalowany przez Stanisława Wyspiańskiego w 1902 roku. Obecnie można go podziwiać w Muzeum Narodowym w Krakowie.");
     },
@@ -57,6 +58,7 @@ app.get('/webhook/', function (req, res) {
               sendTextMessage(sender, message.text);
             }
           });
+
 
           // Install First Run middleware and dialog
           bot.use(function (session, next) {
@@ -154,39 +156,32 @@ dialog.on('goTo', [
         var task = builder.EntityRecognizer.findEntity(args.entities, 'kids');
         if (task) {
           downloadOffersForCategory(session, 1);
-          retun;
         }
 
         var task = builder.EntityRecognizer.findEntity(args.entities, 'esk');
         if (task) {
           downloadOffersForCategory(session, 69);
-          retun;
         }
 
         var task = builder.EntityRecognizer.findEntity(args.entities, 'outdoors');
         if (task) {
           downloadOffersForCategory(session, 109);
-          retun;
         }
 
         var task = builder.EntityRecognizer.findEntity(args.entities, 'seniors');
         if (task) {
           downloadOffersForCategory(session, 111);
-          retun;
         }
 
         var task = builder.EntityRecognizer.findEntity(args.entities, 'everyone');
         if (task) {
           downloadOffersForCategory(session, 287);
-          retun;
         }
 
         var task = builder.EntityRecognizer.findEntity(args.entities, 'adults');
         if (task) {
           downloadOffersForCategory(session, 253);
-          retun;
         }
-
     }
 ]);
 
@@ -206,20 +201,19 @@ function getUserData(session, userID) {
 
 function downloadOffersForCategory(session, category) {
   var request = require('request');
-  console.log("Downloading category! - " + category)
   request('http://go.wroclaw.pl/api/v1.0/offers?key=1008954996011385882032213270462822894601&&category-id=' + category.toString(), function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log("Downloaded category!");
-
-/*
-      obj = JSON.parse(body);
-      items = obj.items;
-      message = new builder.Message();
-      //message.setText(session, "Zobacz moje propozycje")
+      obj = JSON.parse(body)
+      items = obj.items
+      // session.send(items[0].title)
+      message = new builder.Message()
+      message.setText(session, "Zobacz moje propozycje")
       message.elements = []
 
       for (var i = 0; i < items.length && i < 10; i++) {
         var item = items[i];
+        console.log(popularItems);
+        console.log(item.id);
         if (popularItems.indexOf( (item.id.toString())) > -1) {
           session.send("W ostatnim czasie popularnością cieszy się " + item.title +".");
         }
@@ -242,7 +236,7 @@ function downloadOffersForCategory(session, category) {
             });
       }
 
-      session.send(message);*/
+      session.send(message);
     }
   })
 }
