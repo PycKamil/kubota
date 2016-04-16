@@ -188,7 +188,6 @@ dialog.on('goTo', [
           retun;
         }
 
-        next();
     }
 ]);
 
