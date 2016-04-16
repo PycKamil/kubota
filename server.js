@@ -218,28 +218,27 @@ function downloadOffersForCategory(session, category) {
   var request = require('request');
   request('http://go.wroclaw.pl/api/v1.0/offers?key=1008954996011385882032213270462822894601&&category-id=' + category.toString(), function (error, response, body) {
     if (!error && response.statusCode == 200) {
-        obj = JSON.parse(body)
-        items = obj.items
-        // session.send(items[0].title)
-        message = new builder.Message()
-        message.setText(session, "Zobacz moje propozycje")
-        message.elements = []
+      obj = JSON.parse(body)
+      items = obj.items
+      // session.send(items[0].title)
+      message = new builder.Message()
+      message.setText(session, "Zobacz moje propozycje")
+      message.elements = []
 
-        for (var item in items) {
-          if (object.hasOwnProperty(item)) {
-            message.elements.push({
-                title: item.title,
-                subtitle: item.subtitle,
-                image_url: item.mainImage.standard,
-                buttons: [{
-                    type: 'postback',
-                    title: 'Postback',
-                    payload: 'Payload for second element in a generic bubble'
-                }]
-              });
-          }
-        }
-
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i]
+          message.elements.push({
+              title: item.title,
+              subtitle: item.alias,
+              image_url: item.mainImage.standard,
+              buttons: [{
+                  type: 'postback',
+                  title: 'Postback',
+                  payload: 'Payload for second element in a generic bubble'
+              }]
+            });
+      }
+      
       session.send(message);
     }
   })
