@@ -170,14 +170,12 @@ dialog.on('goTo', [
 ]);
 
 function downloadOffersForCategory(session, category) {
-  session.send(category.toString())
-  //
-  // var request = require('request');
-  // request('http://go.wroclaw.pl/api/v1.0/offers?key=1008954996011385882032213270462822894601&&category-id=' + category, function (error, response, body) {
-  //   if (!error && response.statusCode == 200) {
-  //       obj = JSON.parse(body)
-  //       items = obj.items
-  //       session.send(items[0].title)
-  //   }
-  // })
+  var request = require('request');
+  request('http://go.wroclaw.pl/api/v1.0/offers?key=1008954996011385882032213270462822894601&&category-id=' + category.toString(), function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        obj = JSON.parse(body)
+        items = obj.items
+        session.send(items[0].title)
+    }
+  })
 }
