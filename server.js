@@ -209,14 +209,13 @@ function downloadOffersForCategory(session, category) {
   console.log("Downloading category!")
   request('http://go.wroclaw.pl/api/v1.0/offers?key=1008954996011385882032213270462822894601&&category-id=' + category.toString(), function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log("Downloaded category!")
+      console.log("Downloaded category!");
 
-      obj = JSON.parse(body)
-      items = obj.items
-      // session.send(items[0].title)
-      message = new builder.Message()
-      message.setText(session, "Zobacz moje propozycje")
-      message.elements = []
+      obj = JSON.parse(body);
+      items = obj.items;
+      message = new builder.Message();
+      //message.setText(session, "Zobacz moje propozycje")
+      /*message.elements = []
 
       for (var i = 0; i < items.length && i < 10; i++) {
         var item = items[i];
@@ -242,7 +241,7 @@ function downloadOffersForCategory(session, category) {
             });
       }
 
-      session.send(message);
+      session.send(message);*/
     }
   })
 }
