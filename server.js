@@ -56,6 +56,36 @@ app.get('/webhook/', function (req, res) {
           bot.on('reply', function (message) {
               sendTextMessage(sender, message.text);
           });
+
+          bot.add('/', function (session) {
+            session.send("Hi %s, what can I help you with?", session.userData.name);
+          });
+
+          // Install First Run middleware and dialog
+          bot.use(function (session, next) {
+              if (!session.userData.firstRun) {
+                  session.userData.firstRun = true;
+                  session.beginDialog('/firstRun');
+              } else {
+                  next();
+              }
+          });
+          bot.add('/firstRun', [
+              function (session) {
+                  builder.Prompts.text(session, "Hello... What's your name?");
+              },
+              function (session, results) {
+                  // We'll save the prompts result and return control to main through
+                  // a call to replaceDialog(). We need to use replaceDialog() because
+                  // we intercepted the original call to main and we want to remove the
+                  // /firstRun dialog from the callstack. If we called endDialog() here
+                  // the conversation would end since the /firstRun dialog is the only
+                  // dialog on the stack.
+                  session.userData.name = results.response;
+                  session.replaceDialog('/');
+              }
+          ]);
+
           botDict[sender] = bot
         }
         console.log('TEST' + event)
