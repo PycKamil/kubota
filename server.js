@@ -206,7 +206,7 @@ function getUserData(session, userID) {
 
 function downloadOffersForCategory(session, category) {
   var request = require('request');
-  console.log("Downloading category!")
+  console.log("Downloading category! - " + category)
   request('http://go.wroclaw.pl/api/v1.0/offers?key=1008954996011385882032213270462822894601&&category-id=' + category.toString(), function (error, response, body) {
     if (!error && response.statusCode == 200) {
       console.log("Downloaded category!");
