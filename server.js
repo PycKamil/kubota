@@ -207,7 +207,7 @@ function downloadOffersForCategory(session, category) {
         var item = items[i]
           message.elements.push({
               title: item.title,
-              subtitle: item.longDescription,
+              subtitle: item.longDescription.replace(/<\/?[^>]+(>|$)/g, ""),
               image_url: item.mainImage.standard,
               buttons: [{
                   type: 'web_url',
