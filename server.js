@@ -203,11 +203,10 @@ function downloadOffersForCategory(session, category) {
       message = new builder.Message()
       message.setText(session, "Zobacz moje propozycje")
       message.elements = []
-      var popularString;
 
       for (var i = 0; i < items.length && i < 10; i++) {
         var item = items[i];
-        if (popularItems.includes(item.id.toString)) {
+        if (popularItems.indexOf(item.id.toString) > -1) {
           session.send ("W ostatnim czasie popularnością cieszy się " + item.title +".")
         }
           message.elements.push({
