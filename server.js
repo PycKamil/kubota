@@ -205,8 +205,8 @@ function downloadOffersForCategory(session, category) {
       for (var i = 0; i < items.length && i < 10; i++) {
         var item = items[i];
         console.log(popularItems);
-        if (popularItems.indexOf(item.id) > -1) {
-          session.send ("W ostatnim czasie popularnością cieszy się " + item.title +".")
+        if (popularItems.indexOf(Number (item.id)) > -1) {
+          session.send("W ostatnim czasie popularnością cieszy się " + item.title +".");
         }
           message.elements.push({
               title: item.title,
