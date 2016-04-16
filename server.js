@@ -17,7 +17,9 @@ var popularItems = [];
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 dialog.on('showMe', [
     function (session, args, next) {
-      session.send({ fallbackText: text, contentType: 'image/jpeg', contentUrl: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg" })
+    message = new builder.Message()
+    message.SIATECZKAIMAGE = "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg"
+      session.send(message)
       session.send("Obraz „Helenka z wazonem” został namalowany przez Stanisława Wyspiańskiego w 1902 roku. Obecnie można go podziwiać w Muzeum Narodowym w Krakowie.")
     },
 ]);
@@ -43,8 +45,8 @@ app.get('/webhook/', function (req, res) {
           bot = new builder.TextBot();
           bot.add('/', dialog);
           bot.on('reply', function (message) {
-            if (message.attachment) {
-              sendImageMessage(sender, "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg")
+            if (message.SIATECZKAIMAGE) {
+              sendImageMessage(sender, message.SIATECZKAIMAGE)
             } else if (message.elements) {
               sendGenericMessage(sender, message.elements)
             } else {
