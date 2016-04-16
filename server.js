@@ -203,7 +203,7 @@ function downloadOffersForCategory(session, category) {
       message.setText(session, "Zobacz moje propozycje")
       message.elements = []
 
-      for (var i = 0; i < items.length; i++) {
+      for (var i = 0; i < items.length && i < 10; i++) {
         var item = items[i]
           message.elements.push({
               title: item.title,
