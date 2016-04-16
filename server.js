@@ -54,10 +54,14 @@ app.get('/webhook/', function (req, res) {
           bot = new builder.TextBot();
           bot.add('/', dialog);
           bot.on('reply', function (message) {
+            if (message.elements) {
+              sendTextMessage(sender, "mam wiecej elementow !");
+            } else {
               sendTextMessage(sender, message.text);
+            }
           });
 
-      
+
           // Install First Run middleware and dialog
           bot.use(function (session, next) {
               if (!session.userData.firstRun) {
@@ -202,7 +206,27 @@ function downloadOffersForCategory(session, category) {
     if (!error && response.statusCode == 200) {
         obj = JSON.parse(body)
         items = obj.items
-        session.send(items[0].title)
+        // session.send(items[0].title)
+        message = new builder.Message()
+        message.setText(session, "Zobacz moje propozycje")
+        message.elements = []
+
+        for (var item in items) {
+          if (object.hasOwnProperty(item)) {
+            message.elements.push({
+                title: item.title,
+                subtitle: item.subtitle,
+                image_url: item.mainImage.standard,
+                buttons: [{
+                    type: 'postback',
+                    title: 'Postback',
+                    payload: 'Payload for second element in a generic bubble'
+                }]
+              });
+          }
+        }
+
+      session.send(message);
     }
   })
 }
