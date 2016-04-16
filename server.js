@@ -58,7 +58,6 @@ app.get('/webhook/', function (req, res) {
             }
           });
 
-
           // Install First Run middleware and dialog
           bot.use(function (session, next) {
               if (!session.userData.firstRun) {
@@ -218,8 +217,6 @@ function downloadOffersForCategory(session, category) {
 
       for (var i = 0; i < items.length && i < 10; i++) {
         var item = items[i];
-        console.log(popularItems);
-        console.log(item.id);
         if (popularItems.indexOf( (item.id.toString())) > -1) {
           session.send("W ostatnim czasie popularnością cieszy się " + item.title +".");
         }
