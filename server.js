@@ -207,12 +207,12 @@ function downloadOffersForCategory(session, category) {
         var item = items[i]
           message.elements.push({
               title: item.title,
-              subtitle: item.alias,
+              subtitle: item.longDescription,
               image_url: item.mainImage.standard,
               buttons: [{
-                  type: 'postback',
-                  title: 'Postback',
-                  payload: 'Payload for second element in a generic bubble'
+                  type: 'web_url',
+                  title: 'Więcej informacji',
+                  url: item.pageLink
               }]
             });
       }
