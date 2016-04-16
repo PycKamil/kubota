@@ -17,21 +17,17 @@ var popularItems = [];
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 dialog.on('showMe', [
     function (session, args, next) {
-        var task = builder.EntityRecognizer.findEntity(args.entities, 'photo');
-        if (!task) {
-            builder.Prompts.text(session, "What would you like to call the task?");
-        } else {
-            next({ response: task.entity });
-        }
+      message = new builder.Message()
+      message.elements = []
+      message.elements.push({
+        title: "",
+        subtitle: "",
+        image_url: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg",
+        buttons: []
+      });
+      session.send(message)
+      session.send("„Helenka z wazonem” Stanisław Wyspiański, 1902 rok")
     },
-    function (session, results) {
-        if (results.response) {
-            // ... save task
-            session.send("Ok... Added the '%s' task.", results.response);
-        } else {
-            session.send("Ok");
-        }
-    }
 ]);
 var botDict = {};
 
