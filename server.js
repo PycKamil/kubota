@@ -57,10 +57,7 @@ app.get('/webhook/', function (req, res) {
               sendTextMessage(sender, message.text);
           });
 
-          bot.add('/', function (session) {
-            session.send("Hi %s, what can I help you with?", session.userData.name);
-          });
-
+      
           // Install First Run middleware and dialog
           bot.use(function (session, next) {
               if (!session.userData.firstRun) {
