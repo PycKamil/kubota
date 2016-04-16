@@ -209,7 +209,14 @@ function downloadOffersForCategory(session, category) {
               title: item.title,
               subtitle: item.longDescription.replace(/<\/?[^>]+(>|$)/g, ""),
               image_url: item.mainImage.standard,
-              buttons: [{
+              buttons: [
+                {
+                    type: 'postback',
+                    title: 'Wybieram się',
+                    payload: item.id
+                },
+
+                {
                   type: 'web_url',
                   title: 'Więcej informacji',
                   url: item.pageLink
