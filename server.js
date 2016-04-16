@@ -50,7 +50,6 @@ app.get('/webhook/', function (req, res) {
           bot.on('reply', function (message) {
             if (message.SIATECZKAIMAGE || siateczka) {
               siateczka = false
-              sendTextMessage(sender, "a to chociaz dziala?");
               sendImageMessage(sender, "https://upload.wikimedia.org/wikipedia/commons/4/4f/Dziewczynka_z_wazonem_z_kwiatami,1902.jpg");
             } else if (message.elements) {
               sendGenericMessage(sender, message.elements);
